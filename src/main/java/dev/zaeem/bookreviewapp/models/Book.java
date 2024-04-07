@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +24,13 @@ public class Book extends BaseModel{
     private String description;
     @Column(name = "COVER")
     private String cover;
-    @Column(name = "OVERALL_RATING")
-    private int overallRating;
-    @Column(name = "CREATED_AT")
+    @Column(name = "ROUNDED_RATING")
+    private int roundedRating;
+    @Column(name = "EXACT_RATING")
+    private double exactRating;
+    private int ratingCount;
+    @CreationTimestamp
+    @Column(name = "CREATED_AT",nullable = false, updatable = false)
     private Timestamp createdAt;
     public static Book from(AddBookRequest addBookRequest){
         Book book = new Book();
@@ -32,7 +38,9 @@ public class Book extends BaseModel{
         book.setAuthor(addBookRequest.getAuthor());
         book.setDescription(addBookRequest.getDescription());
         book.setCover(addBookRequest.getCover());
-        book.setOverallRating(addBookRequest.getOverallRating());
+        book.setRoundedRating(0);
+        book.setExactRating(0.0);
+        book.setRatingCount(0);
         return book;
     }
     public static List<Book> from(List<AddBookRequest> addBookRequests){

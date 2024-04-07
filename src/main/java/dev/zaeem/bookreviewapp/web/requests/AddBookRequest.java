@@ -12,8 +12,6 @@ public class AddBookRequest extends WebRequestResponse {
     private String author;
     @JsonProperty("description")
     private String description;
-    @JsonProperty("cover")
+    @JsonProperty("cover_image")
     private String cover;
-    @JsonProperty("overall_rating")
-    private int overallRating;
 }

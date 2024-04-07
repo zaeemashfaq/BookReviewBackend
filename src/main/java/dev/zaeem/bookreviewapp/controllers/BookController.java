@@ -60,7 +60,7 @@ public class BookController {
     }
 
     @RequestMapping(
-            value = ApiEndpoint.BOOKS_BY_ID,
+            value = ApiEndpoint.BOOK_BY_ID,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )

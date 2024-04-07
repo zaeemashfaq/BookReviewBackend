@@ -3,10 +3,13 @@ package dev.zaeem.bookreviewapp.services.impl;
 import dev.zaeem.bookreviewapp.exceptions.DataNotFoundException;
 import dev.zaeem.bookreviewapp.factory.BookWebResponseFactory;
 import dev.zaeem.bookreviewapp.models.Book;
+import dev.zaeem.bookreviewapp.models.UserReview;
 import dev.zaeem.bookreviewapp.repository.BookRepository;
 import dev.zaeem.bookreviewapp.services.contract.IBookService;
 import dev.zaeem.bookreviewapp.web.WebRequestResponse;
 import dev.zaeem.bookreviewapp.web.requests.AddBookRequest;
+import dev.zaeem.bookreviewapp.web.requests.AddUserReviewRequest;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,23 +17,32 @@ import java.util.List;
 @Service
 public class BookService implements IBookService {
     private BookRepository bookRepository;
+    private UserReviewService userReviewService;
     private BookWebResponseFactory bookWebResponseFactory;
-    public BookService(BookRepository bookRepository, BookWebResponseFactory bookWebResponseFactory){
+    public BookService(BookRepository bookRepository, @Lazy UserReviewService userReviewService, BookWebResponseFactory bookWebResponseFactory){
         this.bookRepository = bookRepository;
+        this.userReviewService = userReviewService;
         this.bookWebResponseFactory = bookWebResponseFactory;
     }
     @Override
     public List<WebRequestResponse> getAllBooks() throws DataNotFoundException {
         List<Book> bookList = bookRepository.findAll();
-        List<WebRequestResponse> bookWebResponseList = bookWebResponseFactory.createBookWebResponseList(bookList);
-        return bookWebResponseList;
+        List<WebRequestResponse> bookWebResponseSummaryList = bookWebResponseFactory.createBookWebResponseSummaryList(bookList);
+        return bookWebResponseSummaryList;
     }
 
     @Override
     public WebRequestResponse getBookById(int id) throws DataNotFoundException {
         Book book = bookRepository.findById(id);
-        WebRequestResponse bookWebResponse = bookWebResponseFactory.createBookWebResponse(book);
+        List<UserReview> userReviews = userReviewService.getUserReviewsByBook(book);
+        WebRequestResponse bookWebResponse = bookWebResponseFactory.createBookWebResponse(book,userReviews);
         return bookWebResponse;
+    }
+
+    @Override
+    public Book getBookById(AddUserReviewRequest userReviewRequest) throws DataNotFoundException {
+        Book book = bookRepository.findById(userReviewRequest.getBookId());
+        return book;
     }
 
     @Override
@@ -40,5 +52,18 @@ public class BookService implements IBookService {
             bookRepository.save(book);
         }
         return null;
+    }
+
+    @Override
+    public void UpdateBookRating(Book book, int userRating){
+        int ratingCount = book.getRatingCount();
+        book.setRatingCount(ratingCount+1);
+        int roundedRating = book.getRoundedRating();
+        double exactRating = book.getExactRating();
+        double newExactRating = (exactRating*ratingCount + userRating)/(ratingCount+1);
+        int newRoundedRating = (int)Math.round(newExactRating);
+        book.setRoundedRating(newRoundedRating);
+        book.setExactRating(newExactRating);
+        bookRepository.save(book);
     }
 }

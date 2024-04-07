@@ -4,22 +4,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.zaeem.bookreviewapp.web.WebRequestResponse;
 import lombok.AllArgsConstructor;
 
-import java.util.List;
-
 @AllArgsConstructor
-public class BookWebResponse extends WebRequestResponse {
+public class BookWebResponseSummary extends WebRequestResponse {
     @JsonProperty("id")
     int id;
     @JsonProperty("title")
     private String title;
     @JsonProperty("author")
     private String author;
-    @JsonProperty("description")
-    private String description;
     @JsonProperty("cover_image")
     private String cover;
     @JsonProperty("overall_rating")
     private int overallRating;
-    @JsonProperty("user_reviews")
-    private List<UserReviewResponse> userReviews;
+//    @JsonProperty("user_reviews")
+//    private List<UserReviewResponse> userReviews;
 }
