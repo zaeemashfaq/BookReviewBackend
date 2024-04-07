@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 public class BookController {
-    private final IBookService bookService;
+    private IBookService bookService;
 
     public BookController(IBookService bookService){
         this.bookService = bookService;
@@ -37,6 +37,7 @@ public class BookController {
         }
         return responseEntity;
     }
+
     @RequestMapping(
             value = ApiEndpoint.BOOKS,
             method = RequestMethod.GET,
@@ -46,6 +47,28 @@ public class BookController {
         ResponseEntity responseEntity;
         try {
             List<WebRequestResponse> serviceResponse = bookService.getAllBooks();
+            responseEntity = new ResponseEntity<>(serviceResponse, HttpStatus.OK);
+        }
+        catch (DataNotFoundException dataNotFoundException){
+            responseEntity = new ResponseEntity(dataNotFoundException.getLocalizedMessage(),HttpStatus.NOT_FOUND);
+            return responseEntity;
+        }
+        catch (Exception e){
+            responseEntity = new ResponseEntity(e.getLocalizedMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return responseEntity;
+        }
+        return responseEntity;
+    }
+
+    @RequestMapping(
+            value = ApiEndpoint.SEARCH_BOOKS,
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getAllBooksByTitleOrAuthor(@RequestParam("search_text") String searchText){
+        ResponseEntity responseEntity;
+        try {
+            List<WebRequestResponse> serviceResponse = bookService.getAllBooksByTitleOrAuthor(searchText);
             responseEntity = new ResponseEntity<>(serviceResponse, HttpStatus.OK);
         }
         catch (DataNotFoundException dataNotFoundException){

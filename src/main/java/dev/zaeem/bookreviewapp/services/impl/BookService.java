@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookService implements IBookService {
@@ -27,6 +28,20 @@ public class BookService implements IBookService {
     @Override
     public List<WebRequestResponse> getAllBooks() throws DataNotFoundException {
         List<Book> bookList = bookRepository.findAll();
+        List<WebRequestResponse> bookWebResponseSummaryList = bookWebResponseFactory.createBookWebResponseSummaryList(bookList);
+        return bookWebResponseSummaryList;
+    }
+
+    @Override
+    public List<WebRequestResponse> getAllBooksByTitleOrAuthor(String searchText) throws DataNotFoundException {
+        Optional<List<Book>> bookListOptional = bookRepository.findAllByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(searchText,searchText);
+        List<Book> bookList = null;
+        if(bookListOptional.isEmpty()){
+            throw new DataNotFoundException("No books found with the given search text");
+        }
+        else{
+            bookList = bookListOptional.get();
+        }
         List<WebRequestResponse> bookWebResponseSummaryList = bookWebResponseFactory.createBookWebResponseSummaryList(bookList);
         return bookWebResponseSummaryList;
     }
