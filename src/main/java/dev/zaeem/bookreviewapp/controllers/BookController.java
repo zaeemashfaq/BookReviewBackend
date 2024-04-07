@@ -8,10 +8,7 @@ import dev.zaeem.bookreviewapp.web.requests.AddBookRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -49,6 +46,28 @@ public class BookController {
         ResponseEntity responseEntity;
         try {
             List<WebRequestResponse> serviceResponse = bookService.getAllBooks();
+            responseEntity = new ResponseEntity<>(serviceResponse, HttpStatus.OK);
+        }
+        catch (DataNotFoundException dataNotFoundException){
+            responseEntity = new ResponseEntity(dataNotFoundException.getLocalizedMessage(),HttpStatus.NOT_FOUND);
+            return responseEntity;
+        }
+        catch (Exception e){
+            responseEntity = new ResponseEntity(e.getLocalizedMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return responseEntity;
+        }
+        return responseEntity;
+    }
+
+    @RequestMapping(
+            value = ApiEndpoint.BOOKS_BY_ID,
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getBookById(@PathVariable("id") int id){
+        ResponseEntity responseEntity;
+        try {
+            WebRequestResponse serviceResponse = bookService.getBookById(id);
             responseEntity = new ResponseEntity<>(serviceResponse, HttpStatus.OK);
         }
         catch (DataNotFoundException dataNotFoundException){

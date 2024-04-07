@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface IBookService {
     List<WebRequestResponse> getAllBooks() throws DataNotFoundException;
+    WebRequestResponse getBookById(int id) throws DataNotFoundException;
     WebRequestResponse addAllBooks(List<AddBookRequest> addBookRequestList);
 }

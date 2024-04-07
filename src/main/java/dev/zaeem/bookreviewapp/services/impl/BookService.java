@@ -27,6 +27,13 @@ public class BookService implements IBookService {
     }
 
     @Override
+    public WebRequestResponse getBookById(int id) throws DataNotFoundException {
+        Book book = bookRepository.findById(id);
+        WebRequestResponse bookWebResponse = bookWebResponseFactory.createBookWebResponse(book);
+        return bookWebResponse;
+    }
+
+    @Override
     public WebRequestResponse addAllBooks(List<AddBookRequest> addBookRequestList) {
         List<Book> bookList = Book.from(addBookRequestList);
         for(Book book: bookList){
