@@ -10,6 +10,8 @@ import dev.zaeem.bookreviewapp.web.WebRequestResponse;
 import dev.zaeem.bookreviewapp.web.requests.AddBookRequest;
 import dev.zaeem.bookreviewapp.web.requests.AddUserReviewRequest;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +30,14 @@ public class BookService implements IBookService {
     @Override
     public List<WebRequestResponse> getAllBooks() throws DataNotFoundException {
         List<Book> bookList = bookRepository.findAll();
+        List<WebRequestResponse> bookWebResponseSummaryList = bookWebResponseFactory.createBookWebResponseSummaryList(bookList);
+        return bookWebResponseSummaryList;
+    }
+
+    @Override
+    public List<WebRequestResponse> getAllBooksPaged(int pageNumber, int pageSize) throws DataNotFoundException {
+        Page<Book> bookPage = bookRepository.findAll(PageRequest.of(pageNumber,pageSize));
+        List<Book> bookList = bookPage.toList();
         List<WebRequestResponse> bookWebResponseSummaryList = bookWebResponseFactory.createBookWebResponseSummaryList(bookList);
         return bookWebResponseSummaryList;
     }

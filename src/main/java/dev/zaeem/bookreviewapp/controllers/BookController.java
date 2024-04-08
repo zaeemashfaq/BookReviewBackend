@@ -61,6 +61,28 @@ public class BookController {
     }
 
     @RequestMapping(
+            value = ApiEndpoint.BOOKS_PAGED,
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getAllBooksPaged(@RequestParam("page_no") int pageNumber, @RequestParam("page_size") int pageSize){
+        ResponseEntity responseEntity;
+        try {
+            List<WebRequestResponse> serviceResponse = bookService.getAllBooksPaged(pageNumber,pageSize);
+            responseEntity = new ResponseEntity<>(serviceResponse, HttpStatus.OK);
+        }
+        catch (DataNotFoundException dataNotFoundException){
+            responseEntity = new ResponseEntity(dataNotFoundException.getLocalizedMessage(),HttpStatus.NOT_FOUND);
+            return responseEntity;
+        }
+        catch (Exception e){
+            responseEntity = new ResponseEntity(e.getLocalizedMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return responseEntity;
+        }
+        return responseEntity;
+    }
+
+    @RequestMapping(
             value = ApiEndpoint.SEARCH_BOOKS,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE

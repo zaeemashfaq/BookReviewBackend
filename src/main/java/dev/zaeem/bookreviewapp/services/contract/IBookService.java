@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface IBookService {
     List<WebRequestResponse> getAllBooks() throws DataNotFoundException;
+    List<WebRequestResponse> getAllBooksPaged(int pageNumber,int pageSize) throws DataNotFoundException;
     List<WebRequestResponse> getAllBooksByTitleOrAuthor(String searchText) throws DataNotFoundException;
     WebRequestResponse getBookById(int id) throws DataNotFoundException;
 
