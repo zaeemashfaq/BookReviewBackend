@@ -9,8 +9,8 @@ import dev.zaeem.bookreviewapp.web.requests.AddUserReviewRequest;
 import java.util.List;
 
 public interface IUserReviewService {
-    WebRequestResponse addReview(AddUserReviewRequest userReviewRequest) throws DataNotFoundException;
-    WebRequestResponse addReview(List<AddUserReviewRequest> userReviewRequestList) throws DataNotFoundException;
+    WebRequestResponse addReview(AddUserReviewRequest userReviewRequest) throws DataNotFoundException, IllegalArgumentException;
+    WebRequestResponse addReview(List<AddUserReviewRequest> userReviewRequestList) throws DataNotFoundException, IllegalArgumentException;
 
     List<UserReview> getUserReviewsByBook(Book book);
 }

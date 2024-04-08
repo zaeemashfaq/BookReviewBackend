@@ -3,8 +3,10 @@ package dev.zaeem.bookreviewapp.web.requests;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.zaeem.bookreviewapp.web.WebRequestResponse;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class AddUserReviewRequest extends WebRequestResponse {
     @JsonProperty("book_id")
     private int bookId;

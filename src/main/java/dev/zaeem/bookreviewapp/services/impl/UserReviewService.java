@@ -21,7 +21,8 @@ public class UserReviewService implements IUserReviewService {
         this.bookService = bookService;
     }
     @Override
-    public WebRequestResponse addReview(AddUserReviewRequest userReviewRequest) throws DataNotFoundException {
+    public WebRequestResponse addReview(AddUserReviewRequest userReviewRequest) throws DataNotFoundException, IllegalArgumentException{
+        validateUserReviewRequest(userReviewRequest);
         Book reviewedBook = bookService.getBookById(userReviewRequest);
         UserReview userReview = UserReview.from(userReviewRequest,reviewedBook);
         userReviewRepository.save(userReview);
@@ -30,7 +31,7 @@ public class UserReviewService implements IUserReviewService {
     }
 
     @Override
-    public WebRequestResponse addReview(List<AddUserReviewRequest> userReviewRequestList) throws DataNotFoundException {
+    public WebRequestResponse addReview(List<AddUserReviewRequest> userReviewRequestList) throws DataNotFoundException, IllegalArgumentException {
         for (AddUserReviewRequest userReviewRequest: userReviewRequestList){
             addReview(userReviewRequest);
         }
@@ -45,5 +46,20 @@ public class UserReviewService implements IUserReviewService {
             userReviews = userReviewsOptional.get();
         }
         return userReviews;
+    }
+
+    private void validateUserReviewRequest(AddUserReviewRequest userReviewRequest){
+        if(userReviewRequest.getRating() <= 0||userReviewRequest.getRating() > 5){
+            throw new IllegalArgumentException("Illegal Argument! User Rating should be between 1 and 5");
+        }
+        else if(userReviewRequest.getReviewer()==null||userReviewRequest.getReviewer().isEmpty()){
+            throw new IllegalArgumentException("Illegal Argument! Reviewer Name is required");
+        }
+        else if(userReviewRequest.getReviewDetail()==null||userReviewRequest.getReviewDetail().isEmpty()){
+            throw new IllegalArgumentException("Illegal Argument! Review is required");
+        }
+        else if(userReviewRequest.getReviewTitle()==null||userReviewRequest.getReviewTitle().isEmpty()){
+            throw new IllegalArgumentException("Illegal Argument! Review Title is required");
+        }
     }
 }
