@@ -1,14 +1,11 @@
-package com.example.bookreviewapp.services.impl;
-
-import dev.zaeem.bookreviewapp.repository.UserReviewRepository;
-import dev.zaeem.bookreviewapp.services.contract.IUserReviewService;
-import dev.zaeem.bookreviewapp.services.impl.BookService;
-import dev.zaeem.bookreviewapp.services.impl.UserReviewService;
-import dev.zaeem.bookreviewapp.web.requests.AddUserReviewRequest;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+import dev.zaeem.bookreviewapp.services.impl.UserReviewService;
 import static org.mockito.Mockito.mock;
+import dev.zaeem.bookreviewapp.services.contract.IUserReviewService;
+import dev.zaeem.bookreviewapp.repository.UserReviewRepository;
+import dev.zaeem.bookreviewapp.services.impl.BookService;
+import dev.zaeem.bookreviewapp.web.requests.AddUserReviewRequest;
 
 public class UserReviewServiceTest {
     IUserReviewService userReviewService;
