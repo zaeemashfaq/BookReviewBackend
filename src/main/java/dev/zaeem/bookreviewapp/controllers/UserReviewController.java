@@ -12,6 +12,7 @@ import java.util.List;
 
 //@CrossOrigin(origins = {"http://ec2-13-201-72-51.ap-south-1.compute.amazonaws.com:80","http://ec2-13-201-72-51.ap-south-1.compute.amazonaws.com"})
 @RestController
+@CrossOrigin
 public class UserReviewController {
     private IUserReviewService userReviewService;
     public UserReviewController(IUserReviewService userReviewService){
