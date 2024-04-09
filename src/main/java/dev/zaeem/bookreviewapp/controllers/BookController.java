@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://ec2-13-201-72-51.ap-south-1.compute.amazonaws.com:80")
 @RestController
 public class BookController {
     private IBookService bookService;
