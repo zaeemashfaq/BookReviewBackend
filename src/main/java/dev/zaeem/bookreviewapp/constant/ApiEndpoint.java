@@ -1,10 +1,10 @@
 package dev.zaeem.bookreviewapp.constant;
 
 public interface ApiEndpoint {
-    String BOOKS = "/books";
-    String BOOKS_PAGED = "/books/paged";
-    String SEARCH_BOOKS = "/books/search";
-    String BOOK_BY_ID = "/books/{id}";
-    String USER_REVIEWS = "/user-reviews";
-    String USER_REVIEWS_BATCH = "/user-reviews/batch";
+    String BOOKS = "/api/books";
+    String BOOKS_PAGED = "/api/books/paged";
+    String SEARCH_BOOKS = "/api/books/search";
+    String BOOK_BY_ID = "/api/books/{id}";
+    String USER_REVIEWS = "/api/user-reviews";
+    String USER_REVIEWS_BATCH = "/api/user-reviews/batch";
 }
